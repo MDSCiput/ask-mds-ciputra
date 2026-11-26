@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ASK MATAHARI CIPUTRA · Karyawan</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="MDS CIPUTRA">
+<meta name="theme-color" content="#ea0029">
+<link rel="stylesheet" href="style.css">
+<style>select{width:100%;padding:12px;border-radius:12px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit}
+.foto{width:100%;max-height:240px;object-fit:cover;border-radius:12px;margin:0 0 10px;display:block}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;background:linear-gradient(135deg,#ff2a4d,#b3001e 75%,#14213d);color:#fff;border-radius:18px;padding:12px 14px;margin:8px 0 12px;box-shadow:0 6px 16px rgba(234,0,41,.22)}
+.top .s{color:rgba(255,255,255,.85)}.tl{display:flex;align-items:center;gap:10px;min-width:0}.av{flex:none;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:20px}
+.tb{display:flex;gap:8px;flex:none}.tb button{width:40px;height:40px;border-radius:12px;border:0;background:rgba(255,255,255,.2);color:#fff;font-size:18px}
+.req{border-left:6px solid var(--warn);padding:14px}.req.dm{border-left-color:var(--ok)}
+.req .rt{font-size:18px;font-weight:700;line-height:1.25;margin:0 0 6px}.req .rm{font-size:14px;color:var(--mut);margin:2px 0}
+.req .btn{margin-top:12px;width:100%;padding:13px}
+.pset{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:0 14px;margin:16px 0}
+.pset summary{padding:14px 0;font-weight:700;cursor:pointer}.wsum{display:block;font-weight:400;font-size:13px;color:var(--mut);margin-top:2px}
+.pin{padding-bottom:14px}.wl{display:grid;grid-template-columns:1fr 1fr;gap:6px;max-height:260px;overflow-y:auto;padding:2px}
+.wl button{border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;padding:9px 8px;font:inherit;font-size:14px;text-align:left;line-height:1.2}
+.wl button.on{background:color-mix(in srgb,var(--pri) 12%,var(--card));border-color:var(--pri);font-weight:700}
+.lnk{background:none;border:0;color:var(--pri);font:inherit;font-size:13px;font-weight:700;padding:8px 0 0}</style>
+</head><body><main>
+<h1 id="judul">ASK MATAHARI CIPUTRA · Karyawan</h1>
+<div id="auth" class="card hide" style="margin-top:12px">
+<div class="chips"><button id="tmasuk" class="on">Masuk</button><button id="tdaftar">Daftar baru</button></div>
+<label for="nik" style="margin-top:4px">Barcode</label><input id="nik" placeholder="Barcode Anda, contoh: 1023" autocomplete="username" autocapitalize="characters">
+<div id="rnama" class="hide"><label for="nama">Nama</label><input id="nama" placeholder="Contoh: Rina" autocomplete="name"></div>
+<label for="pw">Password</label><input id="pw" type="password" placeholder="Minimal 6 karakter" autocomplete="current-password">
+<p class="s" style="font-size:13px;margin:6px 0 0">Daftar sekali dengan barcode Anda. Password dibuat sendiri, supaya tidak ada yang bisa memakai nama Anda.</p>
+<p class="s" style="font-size:13px;margin:6px 0 0">Lupa password? Minta SPV atau manajer mereset, nanti Anda diberi password sementara.</p>
+<p id="aerr" style="color:#ea0029;font-weight:600;margin:8px 0 0"></p>
+<button class="btn" id="aok">Masuk</button></div>
+<div id="app" class="hide">
+<div class="top">
+<div class="tl"><span class="av">👤</span><div style="min-width:0"><div class="s" style="margin:0;font-size:12px">Masuk sebagai</div><b id="who" style="overflow-wrap:anywhere"></b><div class="s" id="onl" style="margin:0;font-size:12px"></div></div></div>
+<div class="tb"><button id="gpw" title="Ganti password" aria-label="Ganti password">🔑</button><button id="keluar" title="Keluar" aria-label="Keluar">🚪</button></div>
+</div>
+<div id="alarmbar" class="card hide" style="background:linear-gradient(135deg,#ff1f45,#c8001f);border:0;text-align:center"><b style="color:#fff;font-size:20px">🔔 ADA PELANGGAN MENUNGGU!</b><br><button class="btn sm" id="diam" style="margin-top:8px;background:#fff;color:#ea0029">Diamkan 1 menit</button></div>
+<div class="row" style="margin:14px 0 8px"><h2 style="margin:0;font-size:18px">Permintaan masuk</h2><span class="tag" id="cnt">0</span></div>
+<div id="list"></div>
+<details id="pset" class="pset"><summary>⚙️ Pengaturan World dan notifikasi <span id="wsum" class="wsum"></span></summary>
+<div class="pin">
+<div style="font-weight:700;margin-bottom:2px">World tempat Anda bertugas</div>
+<p class="s" style="font-size:13px;margin:0 0 8px">Pilih satu atau lebih. Kosongkan semua untuk menerima semua World.</p>
+<input id="wcari" type="search" placeholder="Cari World…" autocomplete="off" style="margin-bottom:8px">
+<div id="wd" class="wl"></div>
+<button id="wclr" class="lnk" type="button">Hapus semua pilihan</button>
+<button class="btn" id="notif" style="margin:14px 0 6px">🔔 Aktifkan notifikasi</button>
+<button class="btn" id="suara" style="margin:0 0 6px;background:var(--card);color:var(--tx);border:1px solid var(--bd)">🔊 Aktifkan suara alarm di aplikasi</button>
+<p class="s" id="nst" style="font-size:13px;margin:6px 0 0">Pilih World, lalu tekan Aktifkan notifikasi. Anda hanya menerima panggilan untuk World yang dipilih.</p>
+</div></details>
+</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script src="push.js"></script>
+<script>
+var db=supabase.createClient(CFG.url,CFG.key);
+var $=function(x){return document.getElementById(x)};
+var worldSel=[];try{worldSel=JSON.parse(localStorage.getItem("worlds")||"null")||(localStorage.getItem("world")&&localStorage.getItem("world")!=="all"?[localStorage.getItem("world")]:[])}catch(e){}
+var ready=false,ch=null,iv=null,lastBeep=0,worlds={},brands={},pulaus={};
+var tk=localStorage.getItem("tk")||"",mine="",modeDaftar=false;
+var devId=localStorage.getItem("devid");if(!devId){devId="d"+Math.random().toString(36).slice(2)+Date.now().toString(36);localStorage.setItem("devid",devId)}
+var pv=null,hiddenAt=0;
+// online = aplikasi ini sedang terbuka. Sinyal dikirim tiap 45 detik; berhenti sendiri saat halaman ditutup atau disembunyikan.
+function ping(){if(document.visibilityState!=="visible"||!ready||!tk)return;var i=info();
+db.rpc("ping_online",{p_id:devId,p_token:tk,p_world:i.world}).then(function(r){if(r&&r.data===true)$("onl").textContent="🟢 Anda tercatat online selama halaman ini terbuka."}).catch(function(){})}
+function wname(){return worldSel.length?worldSel.map(function(i){return worlds[i]||i}).join(", "):"semua World"}
+function info(){return {nama:mine,token:tk,peran:"staff",world:worldSel.length?worldSel.join(","):null}}
+var alarm=new Audio("suara-notifikasi-ask.mp3");alarm.loop=true;alarm.preload="auto";
+var alarmOn=localStorage.getItem("alarm_on")==="1",diamSampai=0,unlocked=false;
+function unlock(){if(unlocked||!alarmOn)return;alarm.play().then(function(){alarm.pause();alarm.currentTime=0;unlocked=true}).catch(function(){})}
+document.addEventListener("pointerdown",unlock);
+function setSuara(){$("suara").textContent=alarmOn?"🔊 Suara alarm AKTIF (ketuk untuk mematikan)":"🔊 Aktifkan suara alarm di aplikasi"}
+$("suara").onclick=function(){alarmOn=!alarmOn;localStorage.setItem("alarm_on",alarmOn?"1":"0");if(alarmOn)unlock();else alarm.pause();setSuara()};
+$("diam").onclick=function(){diamSampai=Date.now()+60000;alarm.pause()};
+function atur(ada){var bunyi=ada&&alarmOn&&Date.now()>diamSampai&&document.visibilityState==="visible";
+$("alarmbar").classList.toggle("hide",!ada);
+if(bunyi){alarm.play().catch(function(){})}else alarm.pause();
+if(ada)try{navigator.vibrate&&navigator.vibrate([600,200,600])}catch(e){}}
+function beep(){try{navigator.vibrate&&navigator.vibrate([300,100,300]);var c=new (window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator();o.connect(c.destination);o.frequency.value=880;o.start();setTimeout(function(){o.stop()},350)}catch(e){}}
+function mnt(t){var m=Math.floor((Date.now()-new Date(t))/60000);return m<1?"baru saja":m+" menit lalu"}
+$("notif").onclick=async function(){
+var i=info();
+try{await aktifkanPush(db,i);$("nst").textContent="✅ Notifikasi aktif untuk "+wname()+"."}
+catch(e){$("nst").textContent="⚠️ "+e.message}};
+async function load(){
+var q=db.from("permintaan").select("id,pulau_id,brand_id,world_id,kebutuhan,catatan,nama,foto_url,status,diambil_oleh,dibuat").in("status",["menunggu","diambil"]).order("dibuat",{ascending:false}).limit(50);
+if(worldSel.length)q=q.in("world_id",worldSel);
+var r=await q,rows=r.data||[];
+var ada=rows.some(function(x){return x.status==="menunggu"});atur(ada);if(ada&&!alarmOn&&Date.now()-lastBeep>20000){lastBeep=Date.now();beep()}
+var L=$("list");L.innerHTML="";$("cnt").textContent=rows.length;
+if(!rows.length){L.innerHTML='<div class="card s">Belum ada permintaan untuk '+wname()+'.</div>';return}
+rows.forEach(function(x){
+var c=document.createElement("div");c.className="card req"+(x.status==="diambil"?" dm":"");
+if(x.foto_url){var im=document.createElement("img");im.className="foto";im.loading="lazy";im.src=x.foto_url;im.alt="Foto barang dari pelanggan";im.onclick=function(){window.open(x.foto_url,"_blank")};c.appendChild(im)}
+var t=document.createElement("div");t.className="row";t.style.alignItems="flex-start";
+var b=document.createElement("div");b.className="rt";b.textContent=(brands[x.brand_id]||"Semua brand")+(/^Panggilan/.test(x.kebutuhan||"")?"":" · "+x.kebutuhan);
+var g=document.createElement("span");g.className="tag"+(x.status==="diambil"?" g":"");g.style.flex="none";g.textContent=x.status==="diambil"?"Diambil":"Menunggu";
+t.appendChild(b);t.appendChild(g);c.appendChild(t);
+function ln(txt){var d=document.createElement("div");d.className="rm";d.textContent=txt;c.appendChild(d)}
+ln("📍 "+(pulaus[x.pulau_id]||"-")+" · "+(worlds[x.world_id]||""));
+ln("🕒 "+mnt(x.dibuat)+(x.status==="diambil"&&x.diambil_oleh?" · diambil "+x.diambil_oleh:""));
+if(x.nama)ln("👤 "+x.nama);if(x.catatan)ln("📝 "+x.catatan);
+var btn=document.createElement("button");
+if(x.status==="menunggu"){btn.className="btn";btn.textContent="🙋 Ambil";btn.onclick=async function(){
+btn.disabled=true;var r=await db.rpc("ambil_permintaan",{p_id:x.id,p_token:tk});
+if(r.data!==true){if(!(await sesiOk()))return;alert("Sudah diambil karyawan lain.")}load()}}
+else{btn.className="btn ok";btn.textContent="✅ Selesai";btn.onclick=async function(){btn.disabled=true;await db.rpc("selesai_permintaan",{p_id:x.id,p_token:tk});load()}}
+c.appendChild(btn);L.appendChild(c)})}
+function conn(){
+if(!ch){var o={event:"*",schema:"public",table:"permintaan"};if(worldSel.length)o.filter="world_id=in.("+worldSel.join(",")+")";
+ch=db.channel("staff-"+worldSel.join("-")).on("postgres_changes",o,function(m){if(m.eventType==="INSERT")beep();load()}).subscribe()}
+if(!iv)iv=setInterval(load,30000);
+if(!pv){ping();pv=setInterval(ping,45000)}}
+function disc(){if(ch){db.removeChannel(ch);ch=null}if(iv){clearInterval(iv);iv=null}if(pv){clearInterval(pv);pv=null}}
+document.addEventListener("visibilitychange",function(){if(!ready)return;
+if(document.visibilityState==="visible"){if(hiddenAt&&Date.now()-hiddenAt>1200000){location.reload();return}load();conn()}else{hiddenAt=Date.now();disc()}});
+async function init(){setSuara();
+var w=await db.from("world").select("id,nama");
+(w.data||[]).sort(function(a,b){return (parseInt(a.id.slice(1))||0)-(parseInt(b.id.slice(1))||0)}).forEach(function(x){worlds[x.id]=x.nama});
+worldSel=worldSel.filter(function(i){return worlds[i]});
+function ringkasWorld(){var n=worldSel.length;$("wsum").textContent=n?(n<=2?worldSel.map(function(i){return worlds[i]||i}).join(", "):n+" World dipilih"):"Menerima semua World";$("cnt").title=wname()}
+function gambarWorld(){var h=$("wd");h.innerHTML="";var q=($("wcari").value||"").trim().toLowerCase();ringkasWorld();
+Object.keys(worlds).filter(function(id){return !q||worlds[id].toLowerCase().indexOf(q)>=0}).forEach(function(id){var b=document.createElement("button");b.type="button";b.textContent=(worldSel.indexOf(id)>=0?"✓ ":"")+worlds[id];b.className=worldSel.indexOf(id)>=0?"on":"";
+b.onclick=function(){var i=worldSel.indexOf(id);if(i>=0)worldSel.splice(i,1);else worldSel.push(id);localStorage.setItem("worlds",JSON.stringify(worldSel));gambarWorld();disc();load();if(document.visibilityState==="visible")conn();
+segarkanPush(db,info()).then(function(ok){if(ok)$("nst").textContent="✅ Notifikasi aktif untuk "+wname()+"."})};h.appendChild(b)});
+if(!h.children.length)h.appendChild(document.createTextNode("World tidak ditemukan."))}
+$("wcari").oninput=gambarWorld;
+$("wclr").onclick=function(){worldSel=[];localStorage.setItem("worlds","[]");gambarWorld();disc();load();if(document.visibilityState==="visible")conn();segarkanPush(db,info())};
+gambarWorld();
+var b=await db.from("brand").select("id,nama");(b.data||[]).forEach(function(x){brands[x.id]=x.nama});
+var p=await db.from("pulau").select("id,nama,lantai");(p.data||[]).forEach(function(x){pulaus[x.id]=(x.lantai?"L"+x.lantai+" ":"")+x.nama});
+ready=true;if(!worldSel.length&&!localStorage.getItem("pset_seen")){$("pset").open=true}$("pset").ontoggle=function(){if(!$("pset").open)localStorage.setItem("pset_seen","1")};await load();
+if(/iphone|ipad/i.test(navigator.userAgent)&&!navigator.standalone)$("nst").textContent="iPhone: tekan tombol Bagikan lalu Add to Home Screen, kemudian buka aplikasi dari ikonnya di layar utama.";
+else if(await segarkanPush(db,info()))$("nst").textContent="✅ Notifikasi aktif untuk "+wname()+".";
+if(document.visibilityState==="visible")conn()}
+// ---- akun karyawan ----
+function tampilAuth(pesan){tk="";localStorage.removeItem("tk");ready=false;disc();$("app").classList.add("hide");$("auth").classList.remove("hide");$("aerr").textContent=pesan||""}
+async function sesiOk(){try{var r=await db.rpc("sesi_karyawan_cek",{p_token:tk});if(r.error)return true;if(!r.data){tampilAuth("Sesi habis. Silakan masuk lagi.");return false}return true}catch(e){return true}}
+function modeAuth(d){modeDaftar=d;$("tmasuk").className=d?"":"on";$("tdaftar").className=d?"on":"";$("rnama").classList.toggle("hide",!d);$("aok").textContent=d?"Daftar":"Masuk";$("pw").autocomplete=d?"new-password":"current-password";$("aerr").textContent=""}
+$("tmasuk").onclick=function(){modeAuth(false)};$("tdaftar").onclick=function(){modeAuth(true)};
+var PESAN={ada:"Barcode ini sudah terdaftar. Pilih Masuk. Bila bukan Anda yang mendaftar, minta SPV mereset akun.",data:"Barcode harus 4 sampai 20 huruf atau angka, nama 2 sampai 40 huruf.",password:"Password minimal 6 karakter.",salah:"Barcode atau password salah.",kunci:"Terlalu banyak salah. Coba lagi 5 menit lagi."};
+$("aok").onclick=async function(){
+var nik=$("nik").value.trim(),pw=$("pw").value;if(!nik||!pw){$("aerr").textContent="Isi barcode dan password.";return}
+$("aok").disabled=true;
+var r=modeDaftar?await db.rpc("daftar_karyawan",{p_nik:nik,p_nama:$("nama").value,p_password:pw}):await db.rpc("masuk_karyawan",{p_nik:nik,p_password:pw});
+$("aok").disabled=false;
+if(r.error||!r.data){$("aerr").textContent="Gagal terhubung. Coba lagi.";return}
+if(r.data.error){$("aerr").textContent=PESAN[r.data.error]||"Gagal. Coba lagi.";return}
+tk=r.data.token;mine=r.data.nama;localStorage.setItem("tk",tk);$("pw").value="";masukApp()};
+$("keluar").onclick=async function(){try{await db.rpc("keluar_karyawan",{p_token:tk})}catch(e){}tampilAuth("")};
+$("gpw").onclick=async function(){
+var l=prompt("Password lama:");if(l===null)return;var b=prompt("Password baru (minimal 6 karakter):");if(b===null)return;
+var r=await db.rpc("ganti_password",{p_token:tk,p_lama:l,p_baru:b});
+alert(r.data==="ok"?"Password diganti.":r.data==="salah"?"Password lama salah.":r.data==="pendek"?"Password baru minimal 6 karakter.":"Gagal. Coba lagi.")};
+var started=false;
+async function masukApp(){$("auth").classList.add("hide");$("app").classList.remove("hide");$("who").textContent=mine;
+if(!started){started=true;await init()}else{ready=true;await load();if(document.visibilityState==="visible")conn()}}
+(async function(){modeAuth(false);
+if(tk){try{var r=await db.rpc("sesi_karyawan_cek",{p_token:tk});if(r.data){mine=r.data;masukApp();return}}catch(e){}}
+tampilAuth("")})();
+</script></body></html>

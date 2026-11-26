@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ASK MATAHARI CIPUTRA</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.hero{background:radial-gradient(circle at 92% 8%,rgba(255,255,255,.22) 0,rgba(255,255,255,0) 38%),linear-gradient(135deg,#ff2a4d,#b3001e 70%,#14213d);color:#fff;border-radius:22px;padding:20px 18px;margin-bottom:16px;box-shadow:0 8px 22px rgba(234,0,41,.25)}
+.panel{background:var(--card);border:1px solid var(--bd);border-left:5px solid var(--pri);border-radius:16px;padding:12px 14px 16px;margin-bottom:14px}
+.panel .sec{margin-top:4px}
+.heroq{margin-top:12px;background:rgba(255,255,255,.22);border-radius:12px;padding:9px 12px;font-weight:700;font-size:14px;text-align:center}
+.hero:active{transform:scale(.99)}
+.atau{margin:6px 2px 10px;padding:10px 12px;border-radius:12px;background:color-mix(in srgb,var(--pri) 8%,var(--card));font-size:14px;text-align:center;color:var(--tx)}
+.wajib{color:var(--pri);font-size:13px;font-weight:700}
+.hero h1{font-size:24px;margin:0 0 6px}.hero p{margin:0;opacity:.92}
+.loc{display:inline-block;background:rgba(255,255,255,.22);border-radius:99px;padding:3px 12px;font-size:14px;margin-bottom:10px;font-weight:600}
+.sec{display:flex;align-items:center;gap:8px;font-weight:700;margin:18px 0 10px}
+.num{width:24px;height:24px;border-radius:50%;background:var(--pri);color:var(--onpri);display:grid;place-items:center;font-size:13px}
+.bt{display:flex;align-items:center;gap:10px;padding:10px;text-align:left}
+.av{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700}
+.nd{font-size:30px;display:block;margin-bottom:4px}
+.opt{transition:transform .1s}.opt:active{transform:scale(.96)}
+.steps{display:flex;justify-content:space-between;margin:18px 0 4px}
+.stp{flex:1;text-align:center;font-size:13px;color:var(--mut)}
+.stp i{display:grid;place-items:center;width:30px;height:30px;margin:0 auto 4px;border-radius:50%;background:var(--bd);font-style:normal}
+.stp.on{color:var(--tx);font-weight:700}.stp.on i{background:var(--pri);color:var(--onpri)}
+.stp.done i{background:var(--ok);color:#fff}
+@keyframes p{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.pulse{animation:p 1.4s infinite}
+</style>
+</head><body><main>
+<div id="form">
+<div class="hero" id="hero" role="button" tabindex="0" style="cursor:pointer"><img src="icon-192.png" alt="" style="width:46px;height:46px;border-radius:12px;float:right"><span class="loc" id="loc">📍 Memuat…</span><h1>Butuh bantuan? 👋</h1><p>Karyawan World ini segera datang.</p><div class="heroq">⚡ Mau cepat? Ketuk di sini, karyawan langsung dipanggil tanpa isi apa pun</div></div>
+<div id="onl" class="s" style="margin:-2px 2px 12px;font-weight:600"></div>
+<div class="atau">👇 Mau isi detail dulu? Isi di bawah, lalu tekan <b>Panggil Karyawan</b></div>
+<div class="panel"><div class="sec"><span class="num">1</span>Pilih brand <span class="wajib">wajib</span></div>
+<select id="brands"><option value="">Pilih brand…</option></select></div>
+<div class="panel"><div class="sec"><span class="num">2</span>Lokasi Anda saat ini <span class="wajib">wajib</span></div>
+<button class="opt" id="lokbtn" type="button" style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px">📍 Ambil lokasi saat ini</button>
+<p class="s" id="lokinfo" style="font-size:13px;margin:8px 0 0">Lokasi dipakai untuk memastikan Anda berada di toko.</p></div>
+<div class="panel"><div class="sec"><span class="num">3</span>Ciri Anda <span class="s" style="font-weight:400">(boleh dikosongkan)</span></div>
+<input id="nm" placeholder="Contoh: Ibu baju merah">
+<p class="s" style="font-size:13px;margin:6px 0 0">Supaya karyawan mudah menemukan Anda.</p></div>
+<button class="btn call" id="send">🙋 Panggil Karyawan</button>
+<a class="btn" id="kat0" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;background:var(--card);color:var(--tx);border:1px solid var(--bd)">🛍️ Lihat katalog produk Matahari</a>
+</div>
+<div id="status" class="hide">
+<div class="card big"><div class="e pulse" id="se">⏳</div><h1 id="st">Permintaan terkirim</h1><p class="s" id="sd"></p>
+<div class="steps"><div class="stp done" id="s1"><i>✓</i>Terkirim</div><div class="stp" id="s2"><i>2</i>Diambil</div><div class="stp" id="s3"><i>3</i>Selesai</div></div></div>
+<div id="nilai" class="card hide">
+<b>Bagaimana pelayanan kami?</b>
+<div id="stars" style="font-size:38px;letter-spacing:6px;text-align:center;margin:8px 0;cursor:pointer"></div>
+<input id="kom" placeholder="Komentar (boleh dikosongkan)" maxlength="300">
+<button class="btn" id="kirimnilai" style="margin-top:10px">Kirim penilaian</button>
+</div>
+<div id="nilaiok" class="card big hide"><div class="e">🙏</div><b>Terima kasih atas penilaian Anda!</b></div>
+<a class="btn" id="kat" target="_blank" rel="noopener" style="display:block;text-align:center;text-decoration:none;margin-bottom:10px;background:var(--card);color:var(--tx);border:1px solid var(--bd)">🛍️ Lihat katalog produk Matahari</a>
+<button class="btn" id="again" style="background:var(--card);color:var(--tx);border:1px solid var(--bd)">Buat permintaan baru</button>
+</div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script src="config.js"></script>
+<script>
+var db=supabase.createClient(CFG.url,CFG.key);
+var $=function(x){return document.getElementById(x)};
+var pulau=new URLSearchParams(location.search).get("titik")||new URLSearchParams(location.search).get("pulau")||"p1";
+var poll=null,lok=null,cur=null,bintang=0;
+$("kat").href=CFG.katalog||"https://www.matahari.com/";$("kat0").href=$("kat").href;
+function addBrand(id,nama){var o=document.createElement("option");o.value=id===null?"none":id;o.textContent=nama;$("brands").appendChild(o)}
+async function init(){
+var p=await db.from("pulau").select("nama,lantai,keterangan").eq("id",pulau).maybeSingle();
+if(!p.data){$("loc").textContent="📍 Titik tidak ditemukan";return}
+$("loc").textContent="📍 "+(p.data.lantai?"Lantai "+p.data.lantai+" · ":"")+(p.data.keterangan||p.data.nama);
+var b=await db.from("brand").select("id,nama").eq("pulau_id",pulau).order("nama");
+(b.data||[]).forEach(function(x){addBrand(x.id,x.nama)});addBrand(null,"Tidak tahu / semua brand");
+var pb=new URLSearchParams(location.search).get("brand");
+if(pb){var ok=(b.data||[]).filter(function(x){return x.id===pb})[0];if(ok){$("brands").value=ok.id;document.querySelector(".heroq").textContent="⚡ Mau cepat? Ketuk di sini, karyawan "+ok.nama+" langsung dipanggil";brandNama=ok.nama;}}}
+function bintangUI(){var s=$("stars");s.innerHTML="";for(var i=1;i<=5;i++){(function(i){var e=document.createElement("span");e.textContent=i<=bintang?"★":"☆";e.style.color=i<=bintang?"#f5a524":"var(--mut)";e.onclick=function(){bintang=i;bintangUI()};s.appendChild(e)})(i)}}
+function show(r){var s=r.status;
+$("se").textContent=s==="menunggu"?"⏳":s==="diambil"?"🏃":"✅";$("se").className="e"+(s==="selesai"?"":" pulse");
+$("st").textContent=s==="menunggu"?"Permintaan terkirim":s==="diambil"?"Karyawan menuju Anda":"Terima kasih!";
+$("sd").textContent=s==="menunggu"?"Karyawan sedang dihubungi. Mohon tunggu sebentar.":s==="diambil"?((r.diambil_oleh||"Karyawan")+" akan segera tiba."):"Semoga bantuan kami berguna.";
+$("s2").className="stp"+(s==="menunggu"?"":" done");$("s2").firstChild.textContent=s==="menunggu"?"2":"✓";
+$("s3").className="stp"+(s==="selesai"?" done":"");$("s3").firstChild.textContent=s==="selesai"?"✓":"3";
+if(s==="menunggu")$("s2").className="stp on";
+if(s==="selesai"){if(poll){clearInterval(poll);poll=null}if(cur&&!cur.dinilai){bintangUI();$("nilai").classList.remove("hide")}}}
+$("kirimnilai").onclick=async function(){
+if(!bintang){alert("Pilih jumlah bintang dulu ya.");return}
+$("kirimnilai").disabled=true;
+var r=await db.rpc("beri_nilai",{p_id:cur.id,p_token:cur.token,p_rating:bintang,p_komentar:$("kom").value});
+$("kirimnilai").disabled=false;
+if(r.error){alert("Gagal mengirim penilaian. Coba lagi.");return}
+cur.dinilai=true;$("nilai").classList.add("hide");$("nilaiok").classList.remove("hide")};
+var cepat=false,brandNama="";
+$("send").onclick=async function(){
+var bv=$("brands").value;if(!bv&&cepat){bv="none";$("brands").value="none"}
+if(!bv){alert("Pilih brand dulu ya.");return}
+if(!lok&&cepat){$("lokinfo").textContent="Mengambil lokasi…";try{lok=await ambilLokasi();$("lokbtn").textContent="✅ Lokasi terambil (ketuk untuk ambil ulang)";$("lokinfo").textContent="Akurasi sekitar "+Math.round(lok.akurasi)+" m."}catch(e){lok=null;$("lokinfo").textContent=pesanLokasi(e);alert(pesanLokasi(e));return}}
+if(!lok){alert("Tekan Ambil lokasi saat ini dulu ya.");$("lokbtn").focus();return}
+var brand=bv==="none"?null:bv;
+var last=+localStorage.getItem("last")||0;
+if(Date.now()-last<60000){alert("Permintaan sebelumnya baru terkirim. Mohon tunggu sebentar.");return}
+$("send").disabled=true;
+var url=null,path=null;
+var r=await db.rpc("buat_permintaan",{p_pulau:pulau,p_brand:brand,p_catatan:"",p_nama:$("nm").value,p_foto_url:url,p_foto_path:path,p_lat:lok?lok.lat:null,p_lng:lok?lok.lng:null,p_akurasi:lok?lok.akurasi:null});
+$("send").disabled=false;
+if(r.data&&r.data.error){alert(r.data.error==="jauh"?"Anda terdeteksi di luar area toko (sekitar "+r.data.jarak+" m). Permintaan hanya bisa dikirim dari dalam toko.":pesanLokasi({}));return}
+if(r.error||!r.data){alert("Gagal mengirim. Coba lagi.");return}
+localStorage.setItem("last",Date.now());
+cur={id:r.data.id,token:r.data.token,dinilai:false};bintang=0;$("kom").value="";
+$("nilai").classList.add("hide");$("nilaiok").classList.add("hide");
+$("form").classList.add("hide");$("status").classList.remove("hide");show({status:"menunggu"});
+var id=cur.id;
+db.channel("r"+id).on("postgres_changes",{event:"UPDATE",schema:"public",table:"permintaan",filter:"id=eq."+id},function(m){show(m.new)}).subscribe();
+poll=setInterval(async function(){var q=await db.from("permintaan").select("status,diambil_oleh").eq("id",id).maybeSingle();if(q.data)show(q.data)},5000)};
+$("again").onclick=function(){$("lokbtn").textContent="📍 Ambil lokasi saat ini";lok=null;$("lokinfo").textContent="Lokasi dipakai untuk memastikan Anda berada di toko.";$("form").classList.remove("hide");$("status").classList.add("hide")};
+// jumlah karyawan online di area ini (tanpa nama)
+async function jmlOnline(){try{var r=await db.rpc("jumlah_online",{p_pulau:pulau});if(r.error||r.data==null)return;var n=r.data;
+$("onl").textContent=n>0?"🟢 "+n+" karyawan siap membantu di area ini":"⚪ Karyawan akan segera dihubungi lewat HP mereka";}catch(e){}}
+jmlOnline();setInterval(function(){if(document.visibilityState==="visible")jmlOnline()},60000);
+document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")jmlOnline()});
+// lokasi: dipakai hanya bila toko mewajibkannya
+function ambilLokasi(){return new Promise(function(ok,gagal){if(!navigator.geolocation){gagal({code:0});return}
+navigator.geolocation.getCurrentPosition(function(p){ok({lat:p.coords.latitude,lng:p.coords.longitude,akurasi:p.coords.accuracy})},function(e){gagal(e)},{enableHighAccuracy:true,timeout:12000,maximumAge:30000})})}
+function pesanLokasi(e){return e&&e.code===1?"Izinkan akses lokasi di browser, lalu tekan Panggil lagi. Lokasi dipakai untuk memastikan Anda berada di toko.":"Lokasi belum terbaca. Coba lagi, atau pindah ke tempat yang lebih terbuka."}
+$("lokbtn").onclick=async function(){$("lokbtn").disabled=true;$("lokinfo").textContent="Mengambil lokasi…";
+try{lok=await ambilLokasi();$("lokbtn").textContent="✅ Lokasi terambil (ketuk untuk ambil ulang)";$("lokinfo").textContent="Akurasi sekitar "+Math.round(lok.akurasi)+" m."}
+catch(e){lok=null;$("lokbtn").textContent="📍 Ambil lokasi saat ini";$("lokinfo").textContent=pesanLokasi(e)}
+$("lokbtn").disabled=false};
+function panggilCepat(){if(!confirm("Panggil karyawan"+(brandNama?" "+brandNama:"")+" sekarang?\n\nKaryawan akan datang ke lokasi Anda."))return;cepat=true;var r=$("send").onclick();Promise.resolve(r).then(function(){cepat=false},function(){cepat=false})}
+$("hero").onclick=panggilCepat;$("hero").onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();panggilCepat()}};
+init();
+</script></body></html>
